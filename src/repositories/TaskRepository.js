@@ -1,34 +1,46 @@
 import db from '../config/database.js';
 
-export const insertTask = async (title, startDate, endDate) => {
-  return await db.query(
-    'INSERT INTO tasks ("title", "startDate", "endDate") VALUES ($1, $2, $3)',
-    [title, startDate, endDate]
+export const insertTask = async (title, startDate, endDate, createdBy) => {
+  const result = await db.query(
+    'INSERT INTO tasks ("title", "startDate", "endDate", "createdBy") VALUES ($1, $2, $3, $4) RETURNING id;',
+    [title, startDate, endDate, Number(createdBy)]
   );
+  return result.rows[0];
 };
 
-export const insertRelation = async (userId, taskId) => {
-  return await db.query(
-    'INSERT INTO "users_tasks" ("userId", "taskId") VALUES ($1, $2)',
-    [userId, taskId]
+export const findById = async (taskId) => {
+  const result = await db.query(
+    'SELECT * FROM tasks WHERE tasks.id = $1 AND tasks."deletedAt" IS NULL;',
+    [Number(taskId)]
   );
+  return result.rows[0];
 };
 
 export const findAll = async (userId) => {
   const result = await db.query(
-    'SELECT T.* FROM "users_tasks" UT JOIN tasks T ON UT."taskId" = T.id WHERE UT."userId" = $1',
-    [userId]
+    `
+  SELECT tasks.* FROM "users_tasks" 
+  JOIN "tasks" ON "users_tasks"."taskId" = "tasks"."id" 
+  WHERE "users_tasks"."userId" = $1
+  AND "users_tasks"."deletedAt" IS NULL;
+  `,
+    [Number(userId)]
   );
   return result.rows;
 };
 
-export const updateOne = async (title, startDate, endDate, taskId) => {
+export const updateOne = async (taskId, builtQuery, infosToUpdate) => {
+  const values = Object.values(infosToUpdate);
+
   return await db.query(
-    'UPDATE tasks SET "title" = $1, "startDate" = $2, "endDate" = $3 WHERE id = $4',
-    [title, startDate, endDate, taskId]
+    `
+    UPDATE tasks SET ${builtQuery} 
+    WHERE id = $1;
+    `,
+    [Number(taskId), ...values]
   );
 };
 
 export const deleteOne = async (taskId) => {
-  return await db.query('DELETE FROM tasks WHERE id = $1', [taskId]);
+  return await db.query('UPDATE tasks SET "deletedAt" = NOW() WHERE id = $1;', [Number(taskId)]);
 };

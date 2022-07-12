@@ -15,7 +15,6 @@ export const createAccount = async (username, email, password) => {
 
 export const loginIntoAccount = async (email, password) => {
   const user = await UserRepository.findByEmail(email);
-
   if (!user) {
     throw {
       response: {
@@ -28,7 +27,7 @@ export const loginIntoAccount = async (email, password) => {
   if (!bcrypt.compareSync(password, user.password)) {
     throw {
       response: {
-        status: 404,
+        status: 401,
         message: 'Invalid email or password. Try again!',
       },
     };
