@@ -56,7 +56,7 @@ $ npm run dev
 ```bash
 
 - POST /tasks (exige autenticação)
-    - Rota para listar todos os usuários.
+    - Rota para criar uma nova tarefa/compromisso.
     - headers: { "x-access-token": $token }
     - body: {
         "title": "loremipsum loremipsum",
@@ -92,6 +92,7 @@ $ npm run dev
 
 ```
 
+<div align="center">
 <p align="center" style="margin-top:30px">
   <a href="https://github.com/luccarauedys">
     <img src="https://github.com/luccarauedys.png" alt="readme-logo" width="80" height="80" style="border-radius:50%">
@@ -104,9 +105,7 @@ $ npm run dev
   </p>
 </p>
 
-<p align="center">Entre em contato comigo:</p>
-
-<div style="display:flex;gap:3px;justify-content:center">
+<div>
   <a href="mailto:luccarauedys@outlook.com">
     <img alt="Lucca's Email" src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" />
   </a>
@@ -118,4 +117,5 @@ $ npm run dev
   <a href="https://twitter.com/devluccarauedys">
     <img alt="Lucca's Twitter" src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" />
   </a>
+</div>
 </div>
